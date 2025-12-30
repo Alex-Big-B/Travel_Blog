@@ -1,0 +1,42 @@
+@use "sass:math";
+
+@mixin fluid-text($max: 48, $min: 14) {
+  $maxViewportWidth: 1920;
+  $minViewportWidth: 360;
+
+  $maxSize: math.div($max, 14);
+  $minSize: math.div($min, 14);
+  $maxWidth: math.div($maxViewportWidth, 14);
+  $minWidth: math.div($minViewportWidth, 14);
+
+  $slope: math.div(($maxSize - $minSize), ($maxWidth - $minWidth));
+  $yAxisIntersection: -$minWidth * $slope + $minSize;
+
+  font-size: clamp(
+    #{$minSize * 1rem},
+    #{$yAxisIntersection * 1rem} + #{$slope * 100vw},
+    #{$maxSize * 1rem}
+  );
+}
+
+@function rem($pixel) {
+  @if math.is-unitless($pixel) {
+    @return math.div($pixel, 14) + rem;
+  } @else {
+    @error "Передавать аргументом надо только числа, без ЕД";
+  }
+}
+
+@mixin vp-1023 {
+  // 1023px
+  @media (max-width: rem(1023)) {
+    @content;
+  }
+}
+
+@mixin vp-767 {
+  // 767px
+  @media (max-width: rem(767)) {
+    @content;
+  }
+}
