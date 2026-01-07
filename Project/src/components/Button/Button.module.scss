@@ -1,0 +1,66 @@
+.btn {
+  font-family: var(--ff-main);
+  border: none;
+  background-color: var(--color-orange);
+  color: var(--color-white);
+  cursor: pointer;
+  padding: rem(19) rem(30);
+  border-radius: rem(10);
+  font-size: rem(16);
+  line-height: rem(13);
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &--post {
+    margin: rem(60) auto rem(20);
+    transition: background-color var(--tansit);
+    &:hover {
+      background-color: var(--color-orange-peel);
+    }
+    @include vp-767 {
+      margin: rem(30) auto rem(20);
+      @include fluid-text(16, 14);
+    }
+  }
+  &--submit {
+    transition: background-color var(--tansit);
+    border: 2px solid var(--color-orange);
+    &:hover {
+      background-color: var(--color-orange-hover-2);
+    }
+    @media (max-width: 576px) {
+      padding: rem(15) rem(20);
+      @include fluid-text(16, 14);
+    }
+  }
+  &--toggle {
+    border: 2px solid var(--color-orange);
+    color: var(--color-orange);
+    background-color: var(--color-white);
+    transition: background-color var(--tansit);
+    &:hover {
+      background-color: var(--color-orange-hover-1);
+    }
+
+    @media (max-width: 576px) {
+      padding: rem(15) rem(20);
+      @include fluid-text(16, 14);
+    }
+  }
+  &--close {
+    position: absolute;
+    top: rem(14);
+    right: rem(13);
+    background-color: transparent;
+    color: var(--color-black);
+    padding: 0;
+    border-radius: unset;
+    width: rem(21.25);
+    height: rem(24);
+    @include vp-767 {
+      top: rem(8);
+      right: rem(7);
+    }
+  }
+}

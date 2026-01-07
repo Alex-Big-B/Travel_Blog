@@ -1,0 +1,6 @@
+.home {
+  padding: rem(60) 0 rem(158) 0;
+  @include vp-767 {
+    padding: rem(20) 0 rem(20) 0;
+  }
+}

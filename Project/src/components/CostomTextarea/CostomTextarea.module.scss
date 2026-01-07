@@ -1,0 +1,33 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: rem(8);
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: rem(4);
+  }
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    width: 100%;
+  }
+  &__textarea {
+    width: 100%;
+    border: 1px solid var(--color-gainsboro);
+    border-radius: rem(2);
+    background: transparent;
+    padding: rem(5) rem(12);
+    outline: none;
+    min-height: rem(98);
+    resize: none;
+    position: relative;
+    &--error {
+      border: 1px solid var(--color-red);
+    }
+    &::placeholder {
+      color: var(--color-gainsboro);
+    }
+  }
+}

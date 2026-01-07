@@ -1,0 +1,22 @@
+.list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: rem(30);
+  @include vp-767 {
+    grid-template-columns: repeat(2, 1fr);
+
+  }
+  @media (max-width: 576px) {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin: 0 rem(-20);
+    padding: 0 rem(20);
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}

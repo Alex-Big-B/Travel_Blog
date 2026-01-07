@@ -2,11 +2,13 @@
   position: relative;
   padding: rem(29) 0 0 0;
 
-  background-image: url("../../../public/main_img.jpg");
+  background-image: url("/main_img.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-
+  @include vp-767 {
+    padding: rem(10) 0 0 0;
+  }
   &::before {
     content: "";
     top: 0;
@@ -18,36 +20,47 @@
   }
 
   &__wrapper {
+    position: relative;
+    z-index: 2;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: rem(50);
-    padding: 0 0 rem(30) 0;
+    padding: 0 0 rem(35) 0;
+    @include vp-767 {
+      padding: 0 0 rem(15) 0;
+    }
   }
   &__logo {
-    position: relative;
-    z-index: 2;
     display: flex;
     align-items: center;
     gap: rem(16);
     color: var(--color-white);
+    @include vp-767 {
+      gap: rem(8);
+    }
     &-text {
       font-family: var(--ff-logo);
-      @include fluid-text(33.88, 20);
+      @include fluid-text(33.88, 18);
       line-height: 100%;
+      letter-spacing: 0.145em;
+      @include vp-767 {
+        @include fluid-text(18, 18);
+      }
     }
   }
   &__button {
-    position: relative;
-    z-index: 2;
     font-family: var(--ff-main);
     border: none;
     background-color: transparent;
     color: var(--color-white);
     cursor: pointer;
     padding: 0;
-    font-size: 16px;
+    font-size: rem(16);
     line-height: 183%;
+    @include vp-767 {
+      font-size: rem(14);
+    }
   }
 
   &__line {
@@ -65,8 +78,17 @@
     color: var(--color-white);
     text-align: center;
     text-transform: uppercase;
-    padding: rem(108) 0 rem(142);
-    @include fluid-text(48, 28);
+    padding: rem(120) 0 rem(155);
+    @include fluid-text(48, 25);
     line-height: 100%;
+    font-weight: 700;
+    @include vp-767 {
+      font-size: rem(26);
+      padding: rem(60) 0 rem(90);
+    }
+    @media (max-width: 425px) {
+      font-size: rem(20);
+      padding: rem(20) 0 rem(30);
+    }
   }
 }

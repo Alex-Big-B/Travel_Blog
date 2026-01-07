@@ -1,0 +1,38 @@
+.icon {
+  &--logo {
+    width: rem(40.5);
+    height: rem(29.5);
+    @include vp-767 {
+      width: rem(30);
+      height: rem(19);
+    }
+  }
+  &--flake {
+    width: rem(7);
+    height: rem(22);
+    color: var(--color-red);
+  }
+  &--close {
+    width: rem(11.17);
+    height: rem(12.62);
+  }
+  &--resizer {
+    color: var(--color-black);
+    width: rem(8);
+    height: rem(8);
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+  &--arrow-left {
+    width: rem(18);
+    height: rem(14);
+    color: var(--color-orange);
+    margin: 0 rem(10) 0 0;
+  }
+  &--upload {
+    width: rem(14);
+    height: rem(14);
+    color: var(--color-black-25);
+  }
+}
