@@ -2,11 +2,13 @@ import styles from "./RegistrationFormPage.module.scss";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import Button from "../../components/Button/Button";
 import { userRegister } from "../../api/api";
-import { User } from "../../api/apiTypes";
+import { UserAuth } from "../../api/apiTypes";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { SuccessModal } from "../../components/modalWindows/SuccessModal/SuccessModal";
+import { useState } from "react";
 
 interface UseFormType {
   emailReg: string;
@@ -15,6 +17,7 @@ interface UseFormType {
 }
 
 const RegistrationFormPage = () => {
+  const [agreed, setAgreed] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -25,7 +28,13 @@ const RegistrationFormPage = () => {
   } = useForm<UseFormType>();
 
   const { mutate } = useMutation({
-    mutationFn: (data: User) => userRegister(data),
+    mutationFn: (data: UserAuth) => userRegister(data),
+    onSuccess: () => {
+      setAgreed(true);
+    },
+    onError: (error) => {
+      alert(error.message);
+    },
   });
 
   const onSubmit: SubmitHandler<UseFormType> = (data) => {
@@ -47,42 +56,45 @@ const RegistrationFormPage = () => {
               labelText="Email"
               labelFor="emailReg"
               type="email"
+              inputAutocomplete="email"
               placeholder="Email"
+              errorMsg={errors.emailReg?.message}
               {...register("emailReg", {
-                required: true,
+                required: "Укажите email",
                 pattern: {
                   value: /^\S+@\S+\.\S+$/,
                   message: "Введите корректный email адрес",
                 },
               })}
             />
-            {errors.emailReg && (
-              <span className={styles["registration__form-error"]}>{errors.emailReg.message}</span>
-            )}
 
             <div className={styles["registration__form-group"]}>
               <CustomInput
                 labelText="Пароль"
                 labelFor="passwordReg"
                 type="password"
+                inputAutocomplete="new-password"
                 placeholder="Пароль"
+                errorMsg={errors.passwordReg?.message}
                 {...register("passwordReg", {
-                  required: true,
+                  required: "Поле обазательно",
                   minLength: { value: 6, message: "Минимум 6 символов" },
+                  validate: (value) => {
+                    const passwordValue = getValues("repeatPass");
+                    return value === passwordValue || "Пароли не совпадают";
+                  },
                 })}
               />
               <CustomInput
                 labelText="Повторите пароль"
                 labelFor="repeatPass"
                 type="password"
+                inputAutocomplete="off"
                 placeholder="Повторите пароль"
+                errorMsg={errors.repeatPass?.message}
                 {...register("repeatPass", {
-                  required: true,
+                  required: "Поле обазательно",
                   minLength: { value: 6, message: "Минимум 6 символов" },
-                  validate: (value) => {
-                    const passwordValue = getValues("passwordReg");
-                    return value === passwordValue || "Пароли не совпадают";
-                  },
                 })}
               />
             </div>
@@ -108,6 +120,16 @@ const RegistrationFormPage = () => {
           </div>
         </form>
       </div>
+
+      {agreed && (
+        <SuccessModal
+          successText="Регистрация прошла успешно!"
+          onClose={() => {
+            setAgreed(false);
+            navigate("/api/login");
+          }}
+        />
+      )}
     </section>
   );
 };

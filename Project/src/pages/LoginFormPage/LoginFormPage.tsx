@@ -6,6 +6,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { userLoging } from "../../api/api";
 import { useNavigate } from "react-router-dom";
+import { UserAuth } from "../../api/apiTypes";
+import { queryClient } from "../../api/queryClient";
 
 interface UserForm {
   email: string;
@@ -22,16 +24,18 @@ const LoginFormPage = () => {
   } = useForm<UserForm>();
 
   const { mutate } = useMutation({
-    mutationFn: ({ email, password }: UserForm) => userLoging({ email, password }),
+    mutationFn: ({ email, password }: UserAuth) => userLoging({ email, password }),
     onSuccess: () => {
-      console.log("Отправлено");
+      queryClient.invalidateQueries({ queryKey: ["user", "me"] });
+      navigate("/");
     },
     onError: (error) => {
-      console.log(error.message);
+      alert(error.message);
     },
   });
 
   const onSubmite: SubmitHandler<UserForm> = (data) => {
+    console.log(data);
     mutate(data);
   };
 
@@ -46,23 +50,27 @@ const LoginFormPage = () => {
               labelText="Логин"
               labelFor="email"
               type="email"
+              inputAutocomplete="username"
               placeholder="Email"
+              errorMsg={errors.email?.message}
               {...register("email", {
-                required: true,
+                required: "Укажите логин",
                 pattern: {
                   value: /^\S+@\S+\.\S+$/,
                   message: "Введите корректный email адрес",
                 },
               })}
             />
-            {errors.email && <span style={{ color: "red" }}>{errors.email.message}</span>}
+
             <CustomInput
               labelText="Пароль"
               labelFor="password"
               type="password"
+              inputAutocomplete="current-password"
               placeholder="Пароль"
+              errorMsg={errors.password?.message}
               {...register("password", {
-                required: true,
+                required: "Укажите пароль",
                 minLength: { value: 6, message: "Минимум 6 символов" },
               })}
             />

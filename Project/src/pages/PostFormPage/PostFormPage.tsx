@@ -1,8 +1,9 @@
-import styles from "./PostForm.module.scss";
-import Button from "../../Button/Button";
-import CustomInput from "../../CustomInput/CustomInput";
-import CostomTextarea from "../../CostomTextarea/CostomTextarea";
-import Icon from "../../Icon/Icon";
+import styles from "./PostFormPage.module.scss";
+import Icon from "../../components/Icon/Icon";
+import CustomInput from "../../components/CustomInput/CustomInput";
+import CostomTextarea from "../../components/CostomTextarea/CostomTextarea";
+import Button from "../../components/Button/Button";
+
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 
@@ -92,6 +93,7 @@ export const PostForm = () => {
                 labelText="Страна"
                 labelFor="country"
                 type="text"
+                inputAutocomplete="country"
                 placeholder="Страна"
                 {...register("country", {
                   required: "Напишите название страны",
@@ -105,6 +107,7 @@ export const PostForm = () => {
                 labelText="Город"
                 labelFor="city"
                 type="text"
+                inputAutocomplete="address-level2"
                 placeholder="Город"
                 {...register("city", {
                   required: "Напишите название города",

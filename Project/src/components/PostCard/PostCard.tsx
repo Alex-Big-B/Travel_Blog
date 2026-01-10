@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
 import { PostView } from "../../api/apiTypes";
 import styles from "./PostCard.module.scss";
+import { BASE_URL } from "../../api/api";
 
 interface PostCardProp {
   data: PostView;
 }
 
 export const PostCard = ({ data }: PostCardProp) => {
-  const BASE_URL = "https://travelblog.skillbox.cc";
+
   return (
-    <div className={styles.post}>
+    <Link className={styles.post} to={`/api/posts/${data.id}`} aria-label={`Ссылка на пост ${data.title}`}>
       <img
         className={styles["post__img"]}
         src={`${BASE_URL}${data.photo}`}
@@ -30,6 +31,6 @@ export const PostCard = ({ data }: PostCardProp) => {
           Подробнее
         </Link>
       </div>
-    </div>
+    </Link>
   );
 };

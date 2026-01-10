@@ -1,0 +1,61 @@
+.profile {
+  margin: rem(16) auto 0;
+  height: 100vh;
+  display: flex;
+  gap: rem(30);
+  max-width: rem(1110);
+  &__photo {
+    display: flex;
+    flex-direction: column;
+    gap: rem(15);
+    &-img {
+      width: rem(240);
+      max-height: rem(240);
+      border-radius: rem(10);
+    }
+    &-btn {
+      font-family: var(--ff-main);
+      border: none;
+      background-color: transparent;
+      color: var(--color-orange);
+      cursor: pointer;
+      padding: 0;
+      font-size: rem(16);
+      line-height: rem(24);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: rem(6);
+    }
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  &__heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: rem(50);
+    margin: 0 0 rem(5) 0;
+
+    &-name {
+      @include fluid-text(36, 26);
+      font-weight: 600;
+      line-height: 100%;
+    }
+  }
+  &__category {
+    margin: 0 0 rem(2) 0;
+  }
+  &__city {
+    font-size: rem(18);
+    line-height: 100%;
+  }
+  &__bio {
+    font-size: rem(16);
+    line-height: rem(24);
+    word-break: break-all;
+  }
+}

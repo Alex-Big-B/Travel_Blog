@@ -3,12 +3,15 @@ import styles from "./Icon.module.scss";
 
 interface IconProps {
   classN: string;
+  modfy?: string
   hrefName: string;
 }
 
-const Icon = ({ classN, hrefName }: IconProps) => {
+const Icon = ({ classN, modfy, hrefName }: IconProps) => {
+  const classModfy = modfy && styles[modfy];
+
   return (
-    <svg className={styles[classN]} aria-hidden="true" focusable="false">
+    <svg className={`${styles[classN]} ${classModfy}`} aria-hidden="true" focusable="false">
       <use xlinkHref={`${sprite}#icon-${hrefName}`} />
     </svg>
   );

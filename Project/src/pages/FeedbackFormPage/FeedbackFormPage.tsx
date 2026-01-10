@@ -1,0 +1,125 @@
+import styles from "./FeedbackFormPage.module.scss";
+import Button from "../../components/Button/Button";
+import CostomTextarea from "../../components/CostomTextarea/CostomTextarea";
+import CustomInput from "../../components/CustomInput/CustomInput";
+import Icon from "../../components/Icon/Icon";
+
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { addComment } from "../../api/api";
+import { useNavigate, useParams } from "react-router-dom";
+import { AddCommentRequest } from "../../api/apiTypes";
+import { queryClient } from "../../api/queryClient";
+import { SuccessModal } from "../../components/modalWindows/SuccessModal/SuccessModal";
+import { useState } from "react";
+
+interface UseFormType {
+  fullName: string;
+  comment: string;
+}
+
+const FeedbackFormPage = () => {
+  const [agreed, setAgreed] = useState(false);
+  const { postId } = useParams();
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<UseFormType>();
+
+  const { mutate } = useMutation({
+    mutationFn: ({ id, full_name, comment }: AddCommentRequest) =>
+      addComment({ id, full_name, comment }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["post", "one", postId] });
+      setAgreed(true);
+    },
+    onError: (error) => {
+      console.log(error.message);
+    },
+  });
+
+  const onSubmit: SubmitHandler<UseFormType> = (data) => {
+    if (Number(postId) && data) {
+      const apiDate = {
+        id: Number(postId),
+        full_name: data.fullName,
+        comment: data.comment,
+      };
+
+      mutate(apiDate);
+    }
+  };
+
+  return (
+    <section className={styles.feedback}>
+      <div className={styles["feedback__wrapper"]}>
+        <h2 className={styles["feedback__title"]}>Добавление отзыва</h2>
+        <form className={styles.feedback__form} onSubmit={handleSubmit(onSubmit)}>
+          <span className={styles["feedback__form-error"]}>{}</span>
+          <fieldset className={styles["feedback__form-fieldset"]}>
+            <CustomInput
+              labelText="Ваше имя"
+              labelFor="fullName"
+              type="text"
+              inputAutocomplete="name"
+              placeholder="Ваше имя"
+              errorMsg={errors.fullName?.message}
+              {...register("fullName", {
+                required: "Напишите имя ",
+              })}
+            />
+
+            <CostomTextarea
+              labelText="Отзыв"
+              labelFor="comment"
+              placeholder="Добавьте текст отзыва"
+              errorMsg={errors.comment?.message}
+              {...register("comment", {
+                required: "Добавьте текст отзыва",
+                maxLength: {
+                  value: 2000,
+                  message: "Максимум 2000 символов",
+                },
+              })}
+            />
+          </fieldset>
+
+          <div className={styles["feedback__form-buttons"]}>
+            <Button
+              whichClass="btn--toggle"
+              type="button"
+              ariaLabel="Кнопка вернуться назад"
+              onClick={() => navigate(-1)}
+            >
+              <Icon classN="icon--arrow-left" hrefName="arrow-left" />
+              <span> Назад</span>
+            </Button>
+
+            <Button
+              whichClass="btn--submit"
+              type="submit"
+              ariaLabel="Кнопка сохранить отзыв"
+              disabled={isSubmitting}
+            >
+              Сохранить
+            </Button>
+          </div>
+        </form>
+      </div>
+      {agreed && (
+        <SuccessModal
+          successText="Ваш отзыв успешно добавлен"
+          onClose={() => {
+            setAgreed(false);
+            navigate(`/api/posts/${postId}`);
+          }}
+        />
+      )}
+    </section>
+  );
+};
+
+export default FeedbackFormPage;

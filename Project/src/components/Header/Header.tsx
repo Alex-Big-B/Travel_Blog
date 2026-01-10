@@ -1,11 +1,24 @@
 import styles from "./Header.module.scss";
 import "../../art/styles/container.scss";
 import Icon from "../Icon/Icon";
+import Button from "../Button/Button";
 
-import { Link, useNavigate } from "react-router-dom";
+import { fetchMe } from "../../api/api";
+
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { UserProfileModal } from "../modalWindows/UserProfileModal/UserProfileModal";
 
 export const Header = () => {
-  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+
+  const { data, isSuccess, isError, error } = useQuery({
+    queryFn: () => fetchMe(),
+    queryKey: ["user", "me"],
+    retry: 1,
+  });
 
   return (
     <header className={styles.header}>
@@ -16,18 +29,47 @@ export const Header = () => {
             <span className={styles["header__logo-text"]}>Travel</span>
           </Link>
 
-          <button
-            className={`${styles["header__button"]}`}
-            type="button"
-            aria-label="Кнопка авторизации"
-            onClick={() => navigate("/api/login")}
-          >
-            {/* {isAuth ? Войти : } */}
-            Войти
-          </button>
+          {isSuccess ? (
+            <button
+              className={styles["header__profile"]}
+              type="button"
+              aria-label="Кнопка пользователь"
+              onClick={() => setIsOpen((prev) => !prev)}
+            >
+              <img
+                className={styles["header__profile-photo"]}
+                src="/avatar_img.jpg"
+                alt="Изображение пользователя"
+              />
+              <span className={styles["header__profile-name"]}>
+                {data.full_name ? data.full_name : "Имя пользователя"}
+              </span>
+              <Icon
+                classN="icon--polygon"
+                modfy={isOpen ? "icon--polygon--rotate" : ""}
+                hrefName="polygon"
+              />
+            </button>
+          ) : (
+            <Button
+              whichClass="link--auth"
+              ariaLabel="Ссылка на авторизацию"
+              link={true}
+              linkTo="/api/login"
+            >
+              Войти
+            </Button>
+          )}
+
+          {isSuccess && <UserProfileModal isOpen={isOpen} userData={data} />}
         </div>
         <hr className={styles["header__line"]} />
-        <span className={styles["header__title"]}>Там, где мир начинается с путешествий</span>
+
+        {isSuccess ? (
+          <span className={styles["header__title-login"]}>Истории ваших путешествий</span>
+        ) : (
+          <span className={styles["header__title"]}>Там, где мир начинается с путешествий</span>
+        )}
       </div>
     </header>
   );

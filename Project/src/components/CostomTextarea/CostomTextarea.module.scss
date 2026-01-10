@@ -11,6 +11,7 @@
   &__wrapper {
     position: relative;
     display: flex;
+    flex-direction: column;
     width: 100%;
   }
   &__textarea {
@@ -29,5 +30,23 @@
     &::placeholder {
       color: var(--color-gainsboro);
     }
+  }
+  &__inform {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__error {
+    color: var(--color-red);
+    opacity: 0;
+    pointer-events: none;
+
+    &--error {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+  &__length {
+    color: var(--color-black-25);
   }
 }

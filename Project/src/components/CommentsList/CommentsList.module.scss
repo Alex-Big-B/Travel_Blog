@@ -1,0 +1,27 @@
+.comments-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: rem(30);
+  &__item {
+    display: flex;
+    flex-direction: column;
+    &-author {
+      font-weight: 600;
+      font-size: rem(16);
+      line-height: rem(24);
+    }
+    &-data {
+      font-size: rem(14);
+      color: var(--color-grey);
+      margin: 0 0 rem(5) 0;
+    }
+    &-comment {
+      font-size: rem(16);
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
