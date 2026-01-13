@@ -1,34 +1,27 @@
-.field {
+.upload {
   display: flex;
   flex-direction: column;
-  gap: rem(8);
-  width: 100%;
-  margin: 0 0 rem(14) 0;
-  
-  
+
   &__label {
-    display: flex;
-    align-items: center;
-    gap: rem(4);
-  }
-  &__wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-  &__input {
     border: 1px solid var(--color-gainsboro);
     border-radius: rem(2);
-    background: transparent;
-    padding: rem(5) rem(12);
-    outline: none;
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    padding: rem(5) rem(16);
+    cursor: pointer;
+    max-width: rem(200);
 
     &--error {
       border: 1px solid var(--color-red);
     }
-    &::placeholder {
-      color: var(--color-gainsboro);
+
+    &-text {
+      font-size: rem(14);
+      line-height: rem(22);
     }
   }
+
   &__error {
     color: var(--color-red);
     opacity: 0;

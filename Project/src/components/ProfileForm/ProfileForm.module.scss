@@ -1,0 +1,52 @@
+.profile-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__error {
+    text-align: center;
+    color: var(--color-red);
+    opacity: 0;
+  }
+  &__information {
+    border: none;
+    margin: 0 0 rem(52);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: rem(5);
+  }
+
+  &__group {
+    display: flex;
+    gap: rem(20);
+    @media (max-width: 576px) {
+      flex-direction: column;
+    }
+  }
+  &__password {
+    border: none;
+    margin: 0 0 rem(5);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+
+    &-legend {
+      display: block;
+      font-size: rem(18);
+      line-height: rem(22);
+      font-weight: 600;
+      color: var(--color-black-85);
+      margin: 0 0 rem(8) 0;
+    }
+  }
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+
+    @media (max-width: 576px) {
+      flex-direction: column-reverse;
+      gap: 20px;
+    }
+  }
+}

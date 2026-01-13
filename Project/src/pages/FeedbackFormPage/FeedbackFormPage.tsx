@@ -10,8 +10,9 @@ import { addComment } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { AddCommentRequest } from "../../api/apiTypes";
 import { queryClient } from "../../api/queryClient";
-import { SuccessModal } from "../../components/modalWindows/SuccessModal/SuccessModal";
-import { useState } from "react";
+import { useAppDispatch } from "../../redux/hooksType";
+import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
+import { changeAgreed, setAgreedNavigate, setAgreedText } from "../../redux/AgreedSlice";
 
 interface UseFormType {
   fullName: string;
@@ -19,9 +20,10 @@ interface UseFormType {
 }
 
 const FeedbackFormPage = () => {
-  const [agreed, setAgreed] = useState(false);
   const { postId } = useParams();
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -34,10 +36,14 @@ const FeedbackFormPage = () => {
       addComment({ id, full_name, comment }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["post", "one", postId] });
-      setAgreed(true);
+      dispatch(setAgreedText("Ваш отзыв успешно добавлен."));
+      dispatch(setAgreedNavigate(`/api/posts/${postId}`));
+      dispatch(changeAgreed(true));
     },
     onError: (error) => {
       console.log(error.message);
+      dispatch(setErrorText(error.message));
+      dispatch(changeIsError(true));
     },
   });
 
@@ -77,6 +83,7 @@ const FeedbackFormPage = () => {
               labelFor="comment"
               placeholder="Добавьте текст отзыва"
               errorMsg={errors.comment?.message}
+              length="0 / 2 000"
               {...register("comment", {
                 required: "Добавьте текст отзыва",
                 maxLength: {
@@ -109,15 +116,6 @@ const FeedbackFormPage = () => {
           </div>
         </form>
       </div>
-      {agreed && (
-        <SuccessModal
-          successText="Ваш отзыв успешно добавлен"
-          onClose={() => {
-            setAgreed(false);
-            navigate(`/api/posts/${postId}`);
-          }}
-        />
-      )}
     </section>
   );
 };

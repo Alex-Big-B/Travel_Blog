@@ -7,8 +7,10 @@ import { UserAuth } from "../../api/apiTypes";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { SuccessModal } from "../../components/modalWindows/SuccessModal/SuccessModal";
 import { useState } from "react";
+import { useAppDispatch } from "../../redux/hooksType";
+import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
+import { changeAgreed, setAgreedNavigate, setAgreedText } from "../../redux/AgreedSlice";
 
 interface UseFormType {
   emailReg: string;
@@ -17,8 +19,11 @@ interface UseFormType {
 }
 
 const RegistrationFormPage = () => {
-  const [agreed, setAgreed] = useState(false);
+  const [textError, setTextError] = useState<string | null>(null);
+
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -30,10 +35,19 @@ const RegistrationFormPage = () => {
   const { mutate } = useMutation({
     mutationFn: (data: UserAuth) => userRegister(data),
     onSuccess: () => {
-      setAgreed(true);
+      dispatch(setAgreedText("Регистрация прошла успешно!"));
+      dispatch(setAgreedNavigate("/api/login"));
+      dispatch(changeAgreed(true));
     },
     onError: (error) => {
-      alert(error.message);
+      if (error.message.includes("email") && error.message.includes("already")) {
+        console.log(error.message);
+        setTextError("Аккаунт с данным email уже существует");
+      } else {
+        console.log(error.message);
+        dispatch(setErrorText(error.message));
+        dispatch(changeIsError(true));
+      }
     },
   });
 
@@ -49,6 +63,8 @@ const RegistrationFormPage = () => {
     <section className={styles.registration}>
       <div className={styles["registration__wrapper"]}>
         <h2 className={styles["registration__title"]}>Регистрация</h2>
+
+        {textError && <span className={styles["registration__error"]}>{textError}</span>}
 
         <form className={styles["registration__form"]} onSubmit={handleSubmit(onSubmit)}>
           <fieldset className={styles["registration__form-fieldset"]}>
@@ -66,6 +82,12 @@ const RegistrationFormPage = () => {
                   message: "Введите корректный email адрес",
                 },
               })}
+              onChange={(e) => {
+                if (textError !== null) {
+                  setTextError(null);
+                }
+                register("emailReg").onChange(e);
+              }}
             />
 
             <div className={styles["registration__form-group"]}>
@@ -120,16 +142,6 @@ const RegistrationFormPage = () => {
           </div>
         </form>
       </div>
-
-      {agreed && (
-        <SuccessModal
-          successText="Регистрация прошла успешно!"
-          onClose={() => {
-            setAgreed(false);
-            navigate("/api/login");
-          }}
-        />
-      )}
     </section>
   );
 };

@@ -1,17 +1,29 @@
 .profile {
-  margin: rem(16) auto 0;
+  margin: rem(27) auto 0;
   height: 100vh;
   display: flex;
   gap: rem(30);
   max-width: rem(1110);
+
+  @include vp-767 {
+    flex-direction: column;
+  }
+
   &__photo {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: rem(15);
+
     &-img {
-      width: rem(240);
-      max-height: rem(240);
+      max-width: 240px;
+
       border-radius: rem(10);
+      @include vp-767 {
+        width: 100%;
+        max-height: rem(400);
+        object-fit: contain;
+      }
     }
     &-btn {
       font-family: var(--ff-main);
@@ -26,6 +38,7 @@
       justify-content: center;
       align-items: center;
       gap: rem(6);
+      max-width: 159px;
     }
   }
   &__content {
@@ -44,14 +57,19 @@
       @include fluid-text(36, 26);
       font-weight: 600;
       line-height: 100%;
+      margin: 0 0 rem(5) 0;
     }
   }
   &__category {
     margin: 0 0 rem(2) 0;
+    &--self {
+      margin: rem(30) 0 0 0;
+    }
   }
   &__city {
     font-size: rem(18);
     line-height: 100%;
+    margin: 0 0 rem(5) 0;
   }
   &__bio {
     font-size: rem(16);

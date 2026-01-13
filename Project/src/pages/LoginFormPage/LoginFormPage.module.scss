@@ -12,6 +12,12 @@
     min-height: rem(539);
   }
 
+  &__error {
+    display: block;
+    color: var(--color-red);
+    text-align: center;
+  }
+
   &__wrapper {
     max-width: rem(735);
     margin: 0 auto;

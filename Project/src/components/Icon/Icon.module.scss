@@ -11,6 +11,9 @@
     width: rem(7);
     height: rem(22);
     color: var(--color-red);
+    &--none {
+      display: none;
+    }
   }
   &--close {
     width: rem(11.17);

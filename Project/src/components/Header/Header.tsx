@@ -9,16 +9,26 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { UserProfileModal } from "../modalWindows/UserProfileModal/UserProfileModal";
+import { useAppDispatch } from "../../redux/hooksType";
+import { setUserData } from "../../redux/UserDataSlice";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
 
+  const dispatch = useAppDispatch();
+
   const { data, isSuccess, isError, error } = useQuery({
     queryFn: () => fetchMe(),
     queryKey: ["user", "me"],
     retry: 1,
+    
   });
+
+if(isSuccess) {
+  dispatch(setUserData(data))
+}
+
 
   return (
     <header className={styles.header}>
@@ -61,7 +71,9 @@ export const Header = () => {
             </Button>
           )}
 
-          {isSuccess && <UserProfileModal isOpen={isOpen} userData={data} />}
+          {isSuccess && (
+            <UserProfileModal isOpen={isOpen} userData={data} closeModal={() => setIsOpen(false)} />
+          )}
         </div>
         <hr className={styles["header__line"]} />
 

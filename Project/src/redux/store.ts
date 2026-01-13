@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import successReducer from "./AuthSlice";
+import userDataSliceReducer from "./UserDataSlice";
+import errorSliceReducer from "./ErrorSlice";
+import agreedSliceReducer from "./AgreedSlice";
 
 export const store = configureStore({
   reducer: {
-    success: successReducer,
+    userData: userDataSliceReducer,
+    error: errorSliceReducer,
+    agreed: agreedSliceReducer,
   },
 });
 

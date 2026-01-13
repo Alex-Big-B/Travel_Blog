@@ -71,31 +71,11 @@ export const AddPostRequestSchema = z.object({
   description: z.string(),
   country: z.string(),
   city: z.string(),
-  photo: z.string(),
+  photo: z.instanceof(File),
 });
 
 // Тип запроса добавления нового поста
 export type AddPostRequest = z.infer<typeof AddPostRequestSchema>;
-
-// Схема ответа добавления нового поста
-export const AddPostResponseSchema = z.object({
-  id: z.number(),
-  title: z.string(),
-  description: z.string(),
-  country: z.string(),
-  city: z.string(),
-  photo: z.string(),
-  comments: z.array(z.array(z.unknown())).default([[]]),
-  userInfo: z.object({
-    full_name: z.string(),
-    city: z.string(),
-    country: z.string(),
-    bio: z.string(),
-  }),
-});
-
-// Тип ответа добавления нового поста
-export type AddPostResponse = z.infer<typeof AddPostResponseSchema>;
 
 // Схема запроса добавления отзыва по id
 export const AddCommentRequestSchema = z.object({
@@ -116,3 +96,13 @@ export const AddCommentResponseSchema = z.object({
 
 // Тип ответа добавления отзыва по id
 export type AddCommentResponse = z.infer<typeof AddCommentResponseSchema>;
+
+export const ChangeUserPasswordResponseSchema = z.object({
+  message: z.string(),
+});
+export type ChangeUserPasswordResponse = z.infer<typeof ChangeUserPasswordResponseSchema>;
+
+export const ChangeUserPasswordRequestSchema = z.object({
+  password: z.string(),
+});
+export type ChangeUserPasswordRequest = z.infer<typeof ChangeUserPasswordRequestSchema>;

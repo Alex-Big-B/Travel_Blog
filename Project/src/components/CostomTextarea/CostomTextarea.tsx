@@ -7,12 +7,18 @@ interface CostomTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaE
   labelText: string;
   labelFor: string;
   errorMsg?: string;
+  length?: string;
+  value?: string;
+  notFlake?: boolean;
 }
 
 const CostomTextarea: React.FC<CostomTextareaProps> = ({
   labelText,
   labelFor,
   errorMsg,
+  length,
+  value,
+  notFlake,
   ...textareaProps
 }) => {
   const textareaClassName = errorMsg
@@ -22,11 +28,17 @@ const CostomTextarea: React.FC<CostomTextareaProps> = ({
   return (
     <div className={styles.field}>
       <label className={styles["field__label"]} htmlFor={labelFor}>
-        <Icon classN="icon--flake" hrefName="flake" />
+        {notFlake ? (
+          <Icon classN="icon--flake" modfy="icon--flake--none" hrefName="flake" />
+        ) : (
+          <Icon classN="icon--flake" modfy="" hrefName="flake" />
+        )}
         <span className={styles["field__label-text"]}>{labelText}</span>
       </label>
       <div className={styles["field__wrapper"]}>
-        <textarea className={textareaClassName} id={labelFor} {...textareaProps}></textarea>
+        <textarea className={textareaClassName} id={labelFor} {...textareaProps}>
+          {value}
+        </textarea>
         <Icon classN="icon--resizer" hrefName="resizer" />
         <div className={styles["field__inform"]}>
           <span
@@ -39,7 +51,7 @@ const CostomTextarea: React.FC<CostomTextareaProps> = ({
             {errorMsg ? errorMsg : "Невидимый"}
           </span>
 
-          <span className={styles["field__length"]}>0 / 2 000</span>
+          <span className={styles["field__length"]}>{length}</span>
         </div>
       </div>
     </div>

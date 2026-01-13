@@ -4,9 +4,12 @@ import { PosrtsList } from "../../components/PostsList/PostsList";
 import styles from "./HomePage.module.scss";
 import { useEffect, useState } from "react";
 import Button from "../../components/Button/Button";
+import { useNavigate } from "react-router-dom";
 
 export const HomePage = () => {
   const [visibleCount, setVisableCount] = useState(6);
+
+  const navigate = useNavigate();
 
   const { data, isSuccess, isLoading, isError, error, refetch } = useQuery({
     queryFn: () => getPosts(),
@@ -28,26 +31,21 @@ export const HomePage = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handelOnClick = () => {
-    console.log("1");
-  };
 
   if (isSuccess) {
     const visiblePost = data.slice(0, visibleCount);
     return (
-   
-        <section className={styles.home}>
-          <PosrtsList data={visiblePost} />
-          <Button
-            whichClass="btn--post"
-            type="button"
-            onClick={handelOnClick}
-            ariaLabel="Добавить мое путешествие"
-          >
-            Добавить мое путешествие
-          </Button>
-        </section>
- 
+      <section className={styles.home}>
+        <PosrtsList data={visiblePost} />
+        <Button
+          whichClass="btn--post"
+          type="button"
+          onClick={() => navigate("/api/posts")}
+          ariaLabel="Добавить мое путешествие"
+        >
+          Добавить мое путешествие
+        </Button>
+      </section>
     );
   }
 };

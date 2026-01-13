@@ -1,10 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
 import styles from "./PostPage.module.scss";
-import { BASE_URL, getPost } from "../../api/api";
-import { useNavigate, useParams } from "react-router-dom";
 import { CommentsList } from "../../components/CommentsList/CommentsList";
 import Button from "../../components/Button/Button";
 import Icon from "../../components/Icon/Icon";
+import { BASE_URL, getPost } from "../../api/api";
+
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
 
 const PostPage = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const PostPage = () => {
     enabled: !!postId,
   });
 
-  const handelObClik = () => {
+  const handleOnClik = () => {
     if (localStorage.getItem("authToken")) {
       navigate(`/api/posts/${postId}/comments`);
     } else {
@@ -58,7 +59,7 @@ const PostPage = () => {
             <Button
               whichClass="btn--submit"
               type="button"
-              onClick={handelObClik}
+              onClick={handleOnClik}
               ariaLabel="Оставить свой отзыв"
             >
               Ваше впечатление об этом месте

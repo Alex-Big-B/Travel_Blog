@@ -8,6 +8,9 @@ import { userLoging } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import { UserAuth } from "../../api/apiTypes";
 import { queryClient } from "../../api/queryClient";
+import { useState } from "react";
+import { useAppDispatch } from "../../redux/hooksType";
+import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
 
 interface UserForm {
   email: string;
@@ -15,7 +18,10 @@ interface UserForm {
 }
 
 const LoginFormPage = () => {
+  const [textError, setTextError] = useState<string | null>(null);
+
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const {
     handleSubmit,
@@ -30,12 +36,18 @@ const LoginFormPage = () => {
       navigate("/");
     },
     onError: (error) => {
-      alert(error.message);
+      if (error.message.includes("Bad") || error.message.includes("credentials")) {
+        console.log(error.message);
+        setTextError("Неправильный логин или пароль");
+      } else {
+        console.log(error.message);
+        dispatch(setErrorText(error.message));
+        dispatch(changeIsError(true));
+      }
     },
   });
 
   const onSubmite: SubmitHandler<UserForm> = (data) => {
-    console.log(data);
     mutate(data);
   };
 
@@ -43,6 +55,9 @@ const LoginFormPage = () => {
     <section className={styles.login}>
       <div className={styles["login__wrapper"]}>
         <h2 className={styles["login__title"]}>Вход в профиль</h2>
+
+        {textError && <span className={styles["login__error"]}>{textError}</span>}
+
         <form className={styles["login__form"]} onSubmit={handleSubmit(onSubmite)}>
           <span className={styles["login__form-error"]}>{}</span>
           <fieldset className={styles["login__form-fieldset"]}>
@@ -60,6 +75,12 @@ const LoginFormPage = () => {
                   message: "Введите корректный email адрес",
                 },
               })}
+              onChange={(e) => {
+                if (textError !== null) {
+                  setTextError(null);
+                }
+                register("email").onChange(e);
+              }}
             />
 
             <CustomInput

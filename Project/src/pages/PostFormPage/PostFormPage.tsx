@@ -1,69 +1,146 @@
 import styles from "./PostFormPage.module.scss";
+
 import Icon from "../../components/Icon/Icon";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import CostomTextarea from "../../components/CostomTextarea/CostomTextarea";
+import CustomFileInput from "../../components/CustomFileInput/CustomFileInput";
 import Button from "../../components/Button/Button";
 
-import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { addPost } from "../../api/api";
+import { AddPostRequest } from "../../api/apiTypes";
 
-export const PostForm = () => {
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../redux/hooksType";
+import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
+import { changeAgreed, setAgreedNavigate, setAgreedText } from "../../redux/AgreedSlice";
+
+interface UseFormType {
+  photo: File | null;
+  title: string;
+  country: string;
+  city: string;
+  story: string;
+}
+
+const checkImgType = (file: File | null) => {
+  if (!file) return true;
+
+  const allowedExtensions = /\.(jpg|jpeg|png)$/i;
+
+  if (!allowedExtensions.test(file.name)) {
+    return "Разрешены только файлы с расширениями .jpg, .jpeg, .png";
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    return "Файл слишком большой (максимум 5 MB)";
+  }
+
+  return true;
+};
+
+export const PostFormPage = () => {
   const [imgUrl, setImgUrl] = useState<string | null>(null);
+
+  const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm<UseFormType>({
+    defaultValues: {
+      photo: null,
+    },
+  });
 
-  const onSubmit = (data) => {
-    console.log(data);
-  };
+  const { mutate } = useMutation({
+    mutationFn: ({ title, description, country, city, photo }: AddPostRequest) =>
+      addPost({ title, description, country, city, photo }),
+    onSuccess: () => {
+      dispatch(setAgreedText("Ваш отзыв успешно добавлен."));
+      dispatch(setAgreedNavigate("/"));
+      dispatch(changeAgreed(true));
+    },
+    onError: (error) => {
+      console.log(error.message);
+      dispatch(setErrorText(error.message));
+      dispatch(changeIsError(true));
+    },
+  });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setImgUrl(url);
+    const fileList = e.target.files;
+
+    if (fileList && fileList.length > 0) {
+      const file = fileList[0];
+
+      const validationResult = checkImgType(file);
+      setValue("photo", file, { shouldValidate: true });
+
+      if (validationResult == true) {
+        const url = URL.createObjectURL(file);
+        setImgUrl(url);
+      }
     } else {
+      setValue("photo", null, { shouldValidate: true });
       setImgUrl(null);
     }
   };
 
   useEffect(() => {
+    const url = imgUrl;
     return () => {
-      if (imgUrl) {
-        URL.revokeObjectURL(imgUrl);
+      if (url) {
+        URL.revokeObjectURL(url);
       }
     };
   }, [imgUrl]);
 
+  const onSubmit: SubmitHandler<UseFormType> = async (data) => {
+    if (data.title && data.photo && data.story && data.country && data.city) {
+      const newPostData = {
+        title: data.title,
+        description: data.story,
+        country: data.country,
+        city: data.city,
+        photo: data.photo,
+      };
+
+      mutate(newPostData);
+    }
+  };
+
   return (
     <section className={styles.post}>
       <div className={styles["post__wrapper"]}>
-        <h2 className={styles["post__title"]}>Добавление отзыва</h2>
+        <h2 className={styles["post__title"]}>Добавление истории о путешествии</h2>
         <form
           className={styles.post__form}
           onSubmit={handleSubmit(onSubmit)}
           encType="multipart/form-data"
         >
-          {/* <span className={styles["post__form-error"]}>{}</span> */}
           <fieldset className={styles["post__form-fieldset"]}>
-            <label
-              className={styles["post__form-upload"]}
-              htmlFor="foto"
-              aria-label="Загрузить фото"
-            >
-              <input
-                type="file"
-                name="foto"
-                id="foto"
-                accept="image/*"
-                onChange={handleFileChange}
-                hidden
-              />
-              <Icon classN="icon--upload" hrefName="upload" />
-              <span>Загрузите ваше фото</span>
-            </label>
+            <CustomFileInput
+              labelText="Загрузите ваше фото"
+              labelFor="photo"
+              type="file"
+              errorMsg={errors.photo?.message}
+              accept=".jpg, .jpeg, .png"
+              iconClass="icon--upload"
+              iconHref="upload"
+              {...register("photo", {
+                validate: {
+                  required: (file) => file !== null || "Добавьте фото",
+                  checkExtension: checkImgType,
+                },
+                onChange: handleFileChange,
+              })}
+            />
 
             {imgUrl && (
               <img
@@ -72,21 +149,24 @@ export const PostForm = () => {
                 alt="Превью загруженного изображения"
               />
             )}
-
             <CustomInput
               labelText="Заголовок"
               labelFor="title"
               type="text"
               placeholder="Заголовок"
+              errorMsg={errors.title?.message}
               {...register("title", {
                 required: "Напишите заголовок",
-                // pattern: {
-                //   value: /^\S+@\S+\.\S+$/,
-                //   message: "Введите корректный email адрес",
-                // },
+                minLength: {
+                  value: 5,
+                  message: "Минимум 5 символов",
+                },
+                maxLength: {
+                  value: 40,
+                  message: "Максимум 40 символов",
+                },
               })}
             />
-            {/* {errors.email && <span style={{ color: "red" }}>{errors.email.message}</span>} */}
 
             <div className={styles["post__form-group"]}>
               <CustomInput
@@ -95,34 +175,48 @@ export const PostForm = () => {
                 type="text"
                 inputAutocomplete="country"
                 placeholder="Страна"
+                errorMsg={errors.country?.message}
                 {...register("country", {
                   required: "Напишите название страны",
-                  // pattern: {
-                  //   value: /^\S+@\S+\.\S+$/,
-                  //   message: "Введите корректный email адрес",
-                  // },
+                  minLength: {
+                    value: 3,
+                    message: "Минимум 3 символа",
+                  },
+                  maxLength: {
+                    value: 40,
+                    message: "Максимум 40 символов",
+                  },
                 })}
               />
+
               <CustomInput
                 labelText="Город"
                 labelFor="city"
                 type="text"
                 inputAutocomplete="address-level2"
                 placeholder="Город"
+                errorMsg={errors.city?.message}
                 {...register("city", {
                   required: "Напишите название города",
-                  // pattern: {
-                  //   value: /^\S+@\S+\.\S+$/,
-                  //   message: "Введите корректный email адрес",
-                  // },
+                  minLength: {
+                    value: 3,
+                    message: "Минимум 3 символа",
+                  },
+                  maxLength: {
+                    value: 30,
+                    message: "Максимум 30 символов",
+                  },
                 })}
               />
             </div>
+
             <CostomTextarea
-              labelText="Город"
-              labelFor="comment"
-              placeholder="Город"
-              {...register("comment", {
+              labelText="Описание"
+              labelFor="story"
+              placeholder="Добавьте описание вашей истории "
+              errorMsg={errors.story?.message}
+              length="0 / 2 000"
+              {...register("story", {
                 required: "Напишите название города",
                 maxLength: {
                   value: 2000,
@@ -136,19 +230,14 @@ export const PostForm = () => {
             <Button
               whichClass="btn--toggle"
               type="button"
-              ariaLabel="Кнопка перейти на форму регистрации"
-              // onClick={handelOnClick}
+              ariaLabel="Кнопка перейти назад"
+              onClick={() => navigate(-1)}
             >
               <Icon classN="icon--arrow-left" hrefName="arrow-left" />
               <span> Назад</span>
             </Button>
 
-            <Button
-              whichClass="btn--submit"
-              type="submit"
-              ariaLabel="Кнопка войти"
-              // disabled={isSubmitting}
-            >
+            <Button whichClass="btn--submit" type="submit" ariaLabel="Кнопка Сохранить">
               Сохранить
             </Button>
           </div>
