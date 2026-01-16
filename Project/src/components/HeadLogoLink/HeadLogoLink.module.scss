@@ -1,0 +1,18 @@
+.logo {
+  display: flex;
+  align-items: center;
+  gap: rem(16);
+  color: var(--color-white);
+  @include vp-767 {
+    gap: rem(8);
+  }
+  &__text {
+    font-family: var(--ff-logo);
+    @include fluid-text(33.88, 18);
+    line-height: 100%;
+    letter-spacing: 0.145em;
+    @include vp-767 {
+      @include fluid-text(18, 18);
+    }
+  }
+}

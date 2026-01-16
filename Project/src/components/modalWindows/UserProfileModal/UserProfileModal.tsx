@@ -14,9 +14,15 @@ interface UserProfileModalProp {
   isOpen: boolean;
   userData: User;
   closeModal: () => void;
+  buttonRef: React.RefObject<HTMLButtonElement | null>;
 }
 
-export const UserProfileModal = ({ isOpen, userData, closeModal }: UserProfileModalProp) => {
+export const UserProfileModal = ({
+  isOpen,
+  userData,
+  closeModal,
+  buttonRef,
+}: UserProfileModalProp) => {
   const navigate = useNavigate();
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -37,19 +43,27 @@ export const UserProfileModal = ({ isOpen, userData, closeModal }: UserProfileMo
   // Клик мышью за пределами модального окна
   useEffect(() => {
     const handleOnClickOutside = (e: MouseEvent) => {
-      if (!isOpen) {
+      if (!isOpen) return;
+
+      const target = e.target as Node;
+
+      if (buttonRef.current?.contains(target)) {
         return;
       }
-      if (listRef.current && !listRef.current.contains(e.target as Node)) {
+
+      if (listRef.current && !listRef.current.contains(target)) {
         closeModal();
       }
     };
-    document.addEventListener("mousedown", handleOnClickOutside);
-    return () => {
-      document.addEventListener("mousedown", handleOnClickOutside);
-    };
-  });
 
+    document.addEventListener("mousedown", handleOnClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOnClickOutside);
+    };
+  }, [isOpen, closeModal, buttonRef]);
+
+  console.log(isOpen);
   return (
     <div
       className={isOpen ? `${styles.modal} ${styles["modal--open"]}` : styles.modal}

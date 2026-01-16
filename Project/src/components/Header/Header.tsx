@@ -5,17 +5,18 @@ import Button from "../Button/Button";
 
 import { fetchMe } from "../../api/api";
 
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { UserProfileModal } from "../modalWindows/UserProfileModal/UserProfileModal";
 import { useAppDispatch } from "../../redux/hooksType";
 import { setUserData } from "../../redux/UserDataSlice";
 import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
+import { HeadLogoLink } from "../HeadLogoLink/HeadLogoLink";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const dispatch = useAppDispatch();
 
@@ -23,32 +24,27 @@ export const Header = () => {
     queryFn: () => fetchMe(),
     queryKey: ["user", "me"],
     retry: 1,
-    
   });
 
-if(isSuccess) {
-  dispatch(setUserData(data))
-}
-if(isError) {
+  if (isSuccess) {
+    dispatch(setUserData(data));
+  }
+  if (isError) {
     dispatch(setErrorText(error.message));
     dispatch(changeIsError(true));
-}
-
+  }
 
   return (
     <header className={styles.header}>
       <div className="container">
         <div className={styles["header__wrapper"]}>
-          <Link to={"/"} className={styles["header__logo"]} aria-label="Ссылка на главную страницу">
-            <Icon classN="icon--logo" hrefName="logo" />
-            <span className={styles["header__logo-text"]}>Travel</span>
-          </Link>
-
+          <HeadLogoLink />
           {isSuccess ? (
             <button
               className={styles["header__profile"]}
               type="button"
               aria-label="Кнопка пользователь"
+              ref={buttonRef}
               onClick={() => setIsOpen((prev) => !prev)}
             >
               <img
@@ -77,7 +73,12 @@ if(isError) {
           )}
 
           {isSuccess && (
-            <UserProfileModal isOpen={isOpen} userData={data} closeModal={() => setIsOpen(false)} />
+            <UserProfileModal
+              isOpen={isOpen}
+              userData={data}
+              closeModal={() => setIsOpen(false)}
+              buttonRef={buttonRef}
+            />
           )}
         </div>
         <hr className={styles["header__line"]} />
