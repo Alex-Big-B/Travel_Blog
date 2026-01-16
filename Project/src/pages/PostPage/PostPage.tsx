@@ -6,10 +6,15 @@ import { BASE_URL, getPost } from "../../api/api";
 
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
+import PostPageSkeleton from "./PostPageSkeleton";
+import { useAppDispatch } from "../../redux/hooksType";
+import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
 
 const PostPage = () => {
-  const navigate = useNavigate();
   const { postId } = useParams();
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const { data, isLoading, isSuccess, isError, error } = useQuery({
     queryFn: () => getPost(postId!),
@@ -25,8 +30,13 @@ const PostPage = () => {
     }
   };
 
+  if (isLoading) {
+    return <PostPageSkeleton />;
+  }
+
   if (isError) {
-    console.log(error.message);
+    dispatch(setErrorText(error.message));
+    dispatch(changeIsError(true));
   }
 
   if (isSuccess) {

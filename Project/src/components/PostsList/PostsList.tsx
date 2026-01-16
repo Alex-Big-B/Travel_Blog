@@ -1,12 +1,14 @@
-import { Posts } from "../../api/apiTypes";
-import { PostCard } from "../PostCard/PostCard";
 import styles from "./PostsList.module.scss";
+import { PostCard } from "../PostCard/PostCard";
 
-interface PosrtsListProp {
+import { Posts } from "../../api/apiTypes";
+import { memo } from "react";
+
+interface PostsListProp {
   data: Posts;
 }
 
-export const PosrtsList = ({ data }: PosrtsListProp) => {
+export const PostsList = memo(({ data }: PostsListProp) => {
   return (
     <ul className={styles.list}>
       {data.map((post) => (
@@ -16,4 +18,4 @@ export const PosrtsList = ({ data }: PosrtsListProp) => {
       ))}
     </ul>
   );
-};
+});

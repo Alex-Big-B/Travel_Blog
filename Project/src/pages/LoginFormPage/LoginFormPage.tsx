@@ -11,6 +11,7 @@ import { queryClient } from "../../api/queryClient";
 import { useState } from "react";
 import { useAppDispatch } from "../../redux/hooksType";
 import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
+import { Loader } from "../../components/Loader/Loader";
 
 interface UserForm {
   email: string;
@@ -37,10 +38,8 @@ const LoginFormPage = () => {
     },
     onError: (error) => {
       if (error.message.includes("Bad") || error.message.includes("credentials")) {
-        console.log(error.message);
         setTextError("Неправильный логин или пароль");
       } else {
-        console.log(error.message);
         dispatch(setErrorText(error.message));
         dispatch(changeIsError(true));
       }
@@ -117,6 +116,7 @@ const LoginFormPage = () => {
           </div>
         </form>
       </div>
+      {isSubmitting && <Loader />}
     </section>
   );
 };

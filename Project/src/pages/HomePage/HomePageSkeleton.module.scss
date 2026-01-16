@@ -1,0 +1,169 @@
+.skeleton {
+  margin: rem(60) 0;
+  height: 100vh;
+
+  @include vp-767 {
+    margin: rem(20) 0 rem(20) 0;
+  }
+
+  &-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: rem(30);
+
+    @include vp-767 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 576px) {
+      display: flex;
+      flex-wrap: nowrap;
+
+      overflow-x: auto;
+      margin: 0 rem(-20);
+      padding: 0 rem(20);
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    &__item {
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: rem(10);
+      max-width: rem(370);
+
+      width: 100%;
+      @include vp-1023 {
+        min-height: rem(400);
+      }
+
+      @media (max-width: 576px) {
+        max-width: unset;
+        width: rem(250);
+        flex: none;
+      }
+
+      &-img {
+        width: 100%;
+        height: rem(288);
+        border-radius: rem(10) rem(10) 0 0;
+        background: var(--color-skeleton);
+        animation: shimmer 45s linear infinite;
+        @include vp-1023 {
+          animation: shimmer 45s linear infinite;
+          height: rem(200);
+        }
+        @media (max-width: 576px) {
+          animation: shimmer 25s linear infinite;
+        }
+      }
+    }
+
+    &__content {
+      max-width: rem(320);
+      width: 100%;
+      padding: rem(26) rem(25) rem(25);
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      @include vp-1023 {
+        padding: rem(15);
+      }
+
+      &-title {
+        max-width: rem(285);
+        width: 100%;
+        height: rem(27);
+        border-radius: rem(20);
+        margin: 0 0 rem(15) 0;
+        background: var(--color-skeleton);
+        animation: shimmer 65s linear infinite;
+        @include vp-1023 {
+          animation: shimmer 45s linear infinite;
+        }
+        @media (max-width: 576px) {
+          animation: shimmer 25s linear infinite;
+        }
+      }
+
+      &-text {
+        width: 100%;
+        height: 20px;
+        border-radius: rem(20);
+        background: var(--color-skeleton);
+        animation: shimmer 85s linear infinite;
+        margin: 0 0 rem(3) 0;
+
+        @include vp-1023 {
+          animation: shimmer 45s linear infinite;
+        }
+        @media (max-width: 576px) {
+          animation: shimmer 25s linear infinite;
+        }
+        &--xl {
+          width: 90%;
+        }
+        &--l {
+          width: 70%;
+        }
+        &--m {
+          width: 50%;
+        }
+        &--s {
+          width: 25%;
+        }
+      }
+
+      &-location {
+        max-width: rem(117);
+        width: 100%;
+        height: 20px;
+        border-radius: rem(20);
+        background: var(--color-skeleton);
+        animation: shimmer 95s linear infinite;
+        margin: rem(35) 0 rem(4);
+      }
+      &-else {
+        max-width: rem(78);
+        width: 100%;
+        height: 20px;
+        border-radius: rem(20);
+        background: var(--color-skeleton);
+        animation: shimmer 95s linear infinite;
+        @include vp-1023 {
+          animation: shimmer 45s linear infinite;
+        }
+        @media (max-width: 576px) {
+          animation: shimmer 25s linear infinite;
+        }
+      }
+    }
+  }
+
+  &__buttons {
+    max-width: rem(294);
+    width: 100%;
+    height: rem(51);
+    margin: rem(60) auto 0;
+    border-radius: rem(20);
+    background: var(--color-skeleton);
+    animation: shimmer 85s linear infinite;
+    @include vp-1023 {
+      animation: shimmer 45s linear infinite;
+    }
+    @media (max-width: 576px) {
+      animation: shimmer 25s linear infinite;
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -350vw 0;
+  }
+  100% {
+    background-position: 350vw 0;
+  }
+}

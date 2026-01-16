@@ -7,7 +7,6 @@ import { Suspense } from "react";
 import { Loader } from "../components/Loader/Loader";
 import { AgreedModal } from "../components/modalWindows/AgreedModal/AgreedModal";
 
-
 export const Layout = () => {
   const isError = useAppSelector((state) => state.error.isError);
   const isAgreed = useAppSelector((state) => state.agreed.agreed);

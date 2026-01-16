@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useAppDispatch } from "../../redux/hooksType";
 import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
 import { changeAgreed, setAgreedNavigate, setAgreedText } from "../../redux/AgreedSlice";
+import { Loader } from "../../components/Loader/Loader";
 
 interface UseFormType {
   emailReg: string;
@@ -41,10 +42,8 @@ const RegistrationFormPage = () => {
     },
     onError: (error) => {
       if (error.message.includes("email") && error.message.includes("already")) {
-        console.log(error.message);
         setTextError("Аккаунт с данным email уже существует");
       } else {
-        console.log(error.message);
         dispatch(setErrorText(error.message));
         dispatch(changeIsError(true));
       }
@@ -142,6 +141,7 @@ const RegistrationFormPage = () => {
           </div>
         </form>
       </div>
+      {isSubmitting && <Loader />}
     </section>
   );
 };

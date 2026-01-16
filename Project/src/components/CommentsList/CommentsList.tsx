@@ -1,3 +1,4 @@
+import { memo } from "react";
 import styles from "./CommentsList.module.scss";
 
 type Comment = {
@@ -16,7 +17,7 @@ const formatDate = (isoString: string) => {
   return `${day}.${month}.${year}`;
 };
 
-export const CommentsList = ({ comments }: CommentsListProp) => {
+export const CommentsList = memo(({ comments }: CommentsListProp) => {
   return (
     <ul className={styles["comments-list"]}>
       {comments.map((feedback, index) => (
@@ -30,4 +31,4 @@ export const CommentsList = ({ comments }: CommentsListProp) => {
       ))}
     </ul>
   );
-};
+});

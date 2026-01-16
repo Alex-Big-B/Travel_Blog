@@ -1,0 +1,124 @@
+.skeleton {
+  margin: rem(30) 0;
+  &__img {
+    width: 100%;
+    height: rem(450);
+    border-radius: rem(10) rem(10) 0 0;
+    margin: 0 0 rem(30) 0;
+    background: var(--color-skeleton);
+    animation: shimmer 13s linear infinite;
+    @include vp-1023 {
+      animation: shimmer 8s linear infinite;
+    }
+  }
+  &__wrapper {
+    max-width: rem(1008);
+    width: 100%;
+    padding: 0 rem(20);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: rem(15);
+  }
+
+  &__title {
+    max-width: rem(700);
+    width: 100%;
+    height: rem(53);
+    text-align: center;
+    margin: 0 0 rem(15) 0;
+    border-radius: rem(20);
+    background: var(--color-skeleton);
+    animation: shimmer 13s linear infinite;
+    @include vp-1023 {
+      animation: shimmer 8s linear infinite;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0 0 rem(15) 0;
+  }
+  &__text {
+    width: 100%;
+    height: 20px;
+    border-radius: rem(20);
+    background: var(--color-skeleton);
+    animation: shimmer 13s linear infinite;
+    &--xl {
+      width: 90%;
+    }
+    &--l {
+      width: 70%;
+    }
+    &--m {
+      width: 50%;
+    }
+    &--s {
+      width: 25%;
+    }
+    @include vp-1023 {
+      animation: shimmer 8s linear infinite;
+    }
+  }
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+    gap: rem(30);
+    &__item {
+      display: flex;
+      flex-direction: column;
+      &-author {
+        max-width: rem(70);
+        width: 100%;
+        height: rem(24);
+        margin: 0 0 rem(3) 0;
+        background: var(--color-skeleton);
+        animation: shimmer 83s linear infinite;
+        @include vp-1023 {
+          animation: shimmer 8s linear infinite;
+        }
+      }
+      &-data {
+        max-width: rem(70);
+        width: 100%;
+        height: rem(24);
+        margin: 0 0 rem(5) 0;
+        background: var(--color-skeleton);
+        animation: shimmer 83s linear infinite;
+        @include vp-1023 {
+          animation: shimmer 8s linear infinite;
+        }
+      }
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: rem(50);
+    margin: rem(30) 0 0 0;
+    &-btn {
+      max-width: rem(145);
+      width: 100%;
+      height: rem(51);
+      background: var(--color-skeleton);
+      animation: shimmer 83s linear infinite;
+      @include vp-1023 {
+        animation: shimmer 8s linear infinite;
+      }
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -350vw 0;
+  }
+  100% {
+    background-position: 350vw 0;
+  }
+}

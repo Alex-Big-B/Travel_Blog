@@ -12,7 +12,7 @@ interface CostomTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaE
   notFlake?: boolean;
 }
 
-const CostomTextarea: React.FC<CostomTextareaProps> = ({
+const CostomTextarea: React.FC<CostomTextareaProps> =  ({
   labelText,
   labelFor,
   errorMsg,

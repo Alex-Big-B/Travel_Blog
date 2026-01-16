@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { UserProfileModal } from "../modalWindows/UserProfileModal/UserProfileModal";
 import { useAppDispatch } from "../../redux/hooksType";
 import { setUserData } from "../../redux/UserDataSlice";
+import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +28,10 @@ export const Header = () => {
 
 if(isSuccess) {
   dispatch(setUserData(data))
+}
+if(isError) {
+    dispatch(setErrorText(error.message));
+    dispatch(changeIsError(true));
 }
 
 

@@ -1,17 +1,25 @@
-import { useQuery } from "@tanstack/react-query";
-import { getPosts } from "../../api/api";
-import { PosrtsList } from "../../components/PostsList/PostsList";
 import styles from "./HomePage.module.scss";
-import { useEffect, useState } from "react";
+import { PostsList } from "../../components/PostsList/PostsList";
 import Button from "../../components/Button/Button";
+import HomePageSkeleton from "./HomePageSkeleton";
+
+import { getPosts } from "../../api/api";
+
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const HomePage = () => {
+import { useAppDispatch } from "../../redux/hooksType";
+import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
+
+const HomePage = () => {
   const [visibleCount, setVisableCount] = useState(6);
 
   const navigate = useNavigate();
 
-  const { data, isSuccess, isLoading, isError, error, refetch } = useQuery({
+  const dispatch = useAppDispatch();
+
+  const { data, isSuccess, isLoading, isError, error } = useQuery({
     queryFn: () => getPosts(),
     queryKey: ["post", "all"],
   });
@@ -31,12 +39,20 @@ export const HomePage = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  if (isLoading) {
+    return <HomePageSkeleton />;
+  }
+
+  if (isError) {
+    dispatch(setErrorText(error.message));
+    dispatch(changeIsError(true));
+  }
 
   if (isSuccess) {
     const visiblePost = data.slice(0, visibleCount);
     return (
       <section className={styles.home}>
-        <PosrtsList data={visiblePost} />
+        <PostsList data={visiblePost} />
         <Button
           whichClass="btn--post"
           type="button"
@@ -49,3 +65,5 @@ export const HomePage = () => {
     );
   }
 };
+
+export default HomePage;

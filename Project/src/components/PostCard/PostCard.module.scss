@@ -9,7 +9,7 @@
   cursor: pointer;
 
   @include vp-1023 {
-    min-height: 400px;
+    min-height: rem(400);
   }
 
   @media (max-width: 576px) {
@@ -17,11 +17,11 @@
   }
 
   &__img {
-    height: 288px;
+    height: rem(288);
     border-radius: rem(10) rem(10) 0 0;
     overflow: hidden;
     @include vp-1023 {
-      height: 200px;
+      height: rem(200);
     }
   }
   &__content {

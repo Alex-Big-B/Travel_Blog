@@ -3,13 +3,16 @@ import Button from "../../components/Button/Button";
 import CostomTextarea from "../../components/CostomTextarea/CostomTextarea";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import Icon from "../../components/Icon/Icon";
+import { Loader } from "../../components/Loader/Loader";
+
+import { AddCommentRequest } from "../../api/apiTypes";
+import { addComment } from "../../api/api";
+import { queryClient } from "../../api/queryClient";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { addComment } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
-import { AddCommentRequest } from "../../api/apiTypes";
-import { queryClient } from "../../api/queryClient";
+
 import { useAppDispatch } from "../../redux/hooksType";
 import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
 import { changeAgreed, setAgreedNavigate, setAgreedText } from "../../redux/AgreedSlice";
@@ -41,7 +44,6 @@ const FeedbackFormPage = () => {
       dispatch(changeAgreed(true));
     },
     onError: (error) => {
-      console.log(error.message);
       dispatch(setErrorText(error.message));
       dispatch(changeIsError(true));
     },
@@ -116,6 +118,7 @@ const FeedbackFormPage = () => {
           </div>
         </form>
       </div>
+      {isSubmitting && <Loader />}
     </section>
   );
 };

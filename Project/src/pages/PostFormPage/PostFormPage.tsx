@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../redux/hooksType";
 import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
 import { changeAgreed, setAgreedNavigate, setAgreedText } from "../../redux/AgreedSlice";
+import { Loader } from "../../components/Loader/Loader";
 
 interface UseFormType {
   photo: File | null;
@@ -40,7 +41,7 @@ const checkImgType = (file: File | null) => {
   return true;
 };
 
-export const PostFormPage = () => {
+const PostFormPage = () => {
   const [imgUrl, setImgUrl] = useState<string | null>(null);
 
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ export const PostFormPage = () => {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<UseFormType>({
     defaultValues: {
       photo: null,
@@ -67,7 +68,6 @@ export const PostFormPage = () => {
       dispatch(changeAgreed(true));
     },
     onError: (error) => {
-      console.log(error.message);
       dispatch(setErrorText(error.message));
       dispatch(changeIsError(true));
     },
@@ -237,12 +237,20 @@ export const PostFormPage = () => {
               <span> Назад</span>
             </Button>
 
-            <Button whichClass="btn--submit" type="submit" ariaLabel="Кнопка Сохранить">
+            <Button
+              whichClass="btn--submit"
+              type="submit"
+              ariaLabel="Кнопка Сохранить"
+              disabled={isSubmitting}
+            >
               Сохранить
             </Button>
           </div>
         </form>
       </div>
+      {isSubmitting && <Loader />}
     </section>
   );
 };
+
+export default PostFormPage;

@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
-import { PostView } from "../../api/apiTypes";
 import styles from "./PostCard.module.scss";
+
+import { PostView } from "../../api/apiTypes";
 import { BASE_URL } from "../../api/api";
+
+import { Link } from "react-router-dom";
 
 interface PostCardProp {
   data: PostView;

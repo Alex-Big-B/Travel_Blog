@@ -60,6 +60,7 @@ const ProfilePage = () => {
         </div>
       )}
       {isChange && <ProfileForm onSave={() => setIsChange(false)} />}
+        
     </section>
   );
 };
