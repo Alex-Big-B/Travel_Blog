@@ -56,7 +56,6 @@ const ProfileForm = ({ onSave }: ProfileFormProps) => {
       handleSuccess();
     },
     onError: (error) => {
-      console.log(error.message);
       dispatch(setErrorText(error.message));
       dispatch(changeIsError(true));
     },
@@ -67,7 +66,6 @@ const ProfileForm = ({ onSave }: ProfileFormProps) => {
     mutationFn: ({ password }: ChangeUserPasswordRequest) => changeUserPassword({ password }),
     onSuccess: handleSuccess,
     onError: (error) => {
-      console.log(error.message);
       dispatch(setErrorText(error.message));
       dispatch(changeIsError(true));
     },
