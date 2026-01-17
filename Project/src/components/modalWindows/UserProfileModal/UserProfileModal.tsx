@@ -63,7 +63,6 @@ export const UserProfileModal = ({
     };
   }, [isOpen, closeModal, buttonRef]);
 
-  console.log(isOpen);
   return (
     <div
       className={isOpen ? `${styles.modal} ${styles["modal--open"]}` : styles.modal}
