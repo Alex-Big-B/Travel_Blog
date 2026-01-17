@@ -42,7 +42,7 @@ const RegistrationFormPage = () => {
     },
     onError: (error) => {
       if (error.message.includes("email") && error.message.includes("already")) {
-        setTextError("Аккаунт с данным email уже существует");npm run
+        setTextError("Аккаунт с данным email уже существует");
       } else {
         dispatch(setErrorText(error.message));
         dispatch(changeIsError(true));
