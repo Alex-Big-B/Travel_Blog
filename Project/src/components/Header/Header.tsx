@@ -10,7 +10,6 @@ import { useQuery } from "@tanstack/react-query";
 import { UserProfileModal } from "../modalWindows/UserProfileModal/UserProfileModal";
 import { useAppDispatch } from "../../redux/hooksType";
 import { setUserData } from "../../redux/UserDataSlice";
-import { changeIsError, setErrorText } from "../../redux/ErrorSlice";
 import { HeadLogoLink } from "../HeadLogoLink/HeadLogoLink";
 
 export const Header = () => {
@@ -20,7 +19,7 @@ export const Header = () => {
 
   const dispatch = useAppDispatch();
 
-  const { data, isSuccess, isError, error } = useQuery({
+  const { data, isSuccess } = useQuery({
     queryFn: () => fetchMe(),
     queryKey: ["user", "me"],
     retry: 1,
@@ -28,10 +27,6 @@ export const Header = () => {
 
   if (isSuccess) {
     dispatch(setUserData(data));
-  }
-  if (isError) {
-    dispatch(setErrorText(error.message));
-    dispatch(changeIsError(true));
   }
 
   return (
