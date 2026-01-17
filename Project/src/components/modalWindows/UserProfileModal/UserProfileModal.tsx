@@ -1,14 +1,16 @@
 import styles from "./UserProfileModal.module.scss";
-
-import { Link, useNavigate } from "react-router-dom";
 import Button from "../../Button/Button";
-import { useMutation } from "@tanstack/react-query";
+
 import { userLogout } from "../../../api/api";
-import { queryClient } from "../../../api/queryClient";
 import { User } from "../../../api/apiTypes";
+import { queryClient } from "../../../api/queryClient";
+
 import { useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 import { useAppDispatch } from "../../../redux/hooksType";
 import { resetUserData } from "../../../redux/UserDataSlice";
+import { changeIsError, setErrorText } from "../../../redux/ErrorSlice";
 
 interface UserProfileModalProp {
   isOpen: boolean;
@@ -33,10 +35,10 @@ export const UserProfileModal = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user", "me"] });
       closeModal();
-      alert("Пользователь вышел");
     },
-    onError: (errors) => {
-      console.log("useMutation:", errors.message);
+    onError: (error) => {
+      dispatch(setErrorText(error.message));
+      dispatch(changeIsError(true));
     },
   });
 
