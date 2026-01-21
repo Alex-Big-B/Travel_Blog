@@ -6,7 +6,6 @@
   max-width: rem(370);
   min-height: rem(552);
   height: 100%;
-  cursor: pointer;
 
   @include vp-1023 {
     min-height: rem(400);

@@ -10,9 +10,8 @@ interface PostCardProp {
 }
 
 export const PostCard = ({ data }: PostCardProp) => {
-
   return (
-    <Link className={styles.post} to={`/api/posts/${data.id}`} aria-label={`Ссылка на пост ${data.title}`}>
+    <div className={styles.post}>
       <img
         className={styles["post__img"]}
         src={`${BASE_URL}${data.photo}`}
@@ -27,12 +26,12 @@ export const PostCard = ({ data }: PostCardProp) => {
 
         <Link
           className={styles["post__content-link"]}
-          to={`/posts/${data.id}`}
+          to={`/api/posts/${data.id}`}
           aria-label={`Подробнее о посте ${data.title}`}
         >
           Подробнее
         </Link>
       </div>
-    </Link>
+    </div>
   );
 };
